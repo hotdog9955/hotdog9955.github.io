@@ -28,16 +28,26 @@
     <div class="marquee">
       <marquee>Best website EVER!!</marquee>
     </div>
-    <audio controls loop autoplay>
-      <source src="audio/Pixel_Peeker_Polka.mp3" type="audio/mpeg">
-    </audio> 
+
+    <button id="play-button">Click to Enable Audio!</button>
+
+    <script>
+      document.getElementById('play-button').addEventListener('click', function() {
+        var audio = document.createElement('audio');
+        audio.setAttribute('src', 'audio/Pixel_Peeker_Polka.mp3');
+        audio.setAttribute('autoplay', 'autoplay');
+        audio.setAttribute('loop', 'loop');
+        document.body.appendChild(audio);
+      });
+    </script>
+
     <br>
     <p><strong>Hi! I'm Jordan. I'm an embedded systems programmer!</strong></p>
     <br>
     <img src="images/speed.gif" width="350" />
     <img src="images/house.gif" alt="Dr house my beloved" width="350" />
     <br>
-    <img src="images/castle-crashers-dance.gif" alt="Castle crashers dance" width ="350">
+    <img src="images/castle-crashers-dance.gif" alt="Castle crashers dance" width="350">
 
     <br>
     <p>This site is still <em>under construction</em>... tell me what to add I'm not very creative.</p>
@@ -45,7 +55,7 @@
     <hr>
     <h2>Socials!</h2>
     <ul>
-      <li><a heref="https://discord.com/users/734551570296864922">DISCORD: hotdog9955</a></li>
+      <li><a href="https://discord.com/users/734551570296864922">DISCORD: hotdog9955</a></li>
       <li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">MYSPACE!</a></li>
       <li><a href="https://steamcommunity.com/profiles/76561198251432254/">STEAM!!</a></li>
     </ul>
