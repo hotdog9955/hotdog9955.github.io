@@ -206,7 +206,7 @@
       </div>
     </section>
 
-    <!-- Projects with Reactive Category Buttons -->
+    <!-- Projects -->
     <section id="projects">
       <h2>Projects</h2>
       <div class="toolbar" role="toolbar" aria-label="Project categories">
@@ -273,29 +273,6 @@
         </article>
       </div>
     </section>
-
-    <!-- Contact -->
-    <section id="contact">
-      <h2>Get in touch</h2>
-      <div class="card">
-        <form action="mailto:jordancisneroscl@gmail.com" method="post" enctype="text/plain" onsubmit="return validateForm(event)">
-          <label>
-            <span>Name</span>
-            <input type="text" name="name" placeholder="Your name" required />
-          </label>
-          <label>
-            <span>Email</span>
-            <input type="email" name="email" placeholder="you@example.com" required />
-          </label>
-          <label>
-            <span>Message</span>
-            <textarea name="message" rows="5" placeholder="Hello Jordan..." required></textarea>
-          </label>
-          <button class="btn btn--primary" type="submit">Send</button>
-        </form>
-      </div>
-    </section>
-
     <footer>
       <div class="container foot">
         <span>© <span id="year"></span> Jordan Cisneros</span>
@@ -339,19 +316,6 @@
         });
       });
     })();
-
-    // Basic form validation (client-side)
-    function validateForm(e){
-      var form = e.target;
-      var email = form.email.value || '';
-      var ok = /.+@.+\..+/.test(email);
-      if(!ok){
-        alert('Please enter a valid email address.');
-        e.preventDefault();
-        return false;
-      }
-      return true;
-    }
   </script>
 </body>
 </html>
