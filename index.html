@@ -370,46 +370,6 @@
         flex-wrap: wrap
       }
     }
-
-    /* Live frame styles */
-    .liveframe {
-      position: relative;
-      width: 100%;
-      height: 170px;
-      overflow: hidden;
-      border-radius: 10px;
-      background: #0f1524;
-      border: 1px solid rgba(148, 163, 184, .15);
-    }
-
-    .liveframe__iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      display: block;
-    }
-
-    .liveframe__fallback {
-      position: absolute;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      font-size: .95rem;
-      color: var(--muted);
-      padding: 10px;
-      text-align: center;
-      background: linear-gradient(180deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, .01));
-    }
-
-    .liveframe__fallback a {
-      text-decoration: underline;
-    }
-
-    /* When the page is being rendered *inside* the iframe, hide the preview card to prevent recursion */
-    html[data-embed="1"] #personalSiteCard {
-      display: none;
-    }
   </style>
 </head>
 
@@ -583,16 +543,8 @@
         </article>
 
         <!-- Tools -->
-        <article class="project" data-category="tools" id="personalSiteCard">
-          <div class="liveframe" aria-label="Live preview of this website">
-            <iframe id="personalSiteIframe" class="liveframe__iframe" title="Live site preview" loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-              sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
-            <div id="personalSiteFallback" class="liveframe__fallback" role="note" aria-live="polite">
-              Couldn’t embed a live preview (site blocks iframes).<br />
-              <a id="personalSiteOpen" href="#" target="_blank" rel="noopener">Open live preview in a new tab</a>
-            </div>
-          </div>
+        <article class="project" data-category="tools">
+          <img src="https://picsum.photos/seed/site/600/400" alt="Placeholder image for personal website" />
           <h3>Personal Website</h3>
           <p>Static site hosted on GitHub Pages.</p>
           <div class="meta">
@@ -643,59 +595,6 @@
           apply(this.getAttribute('data-filter'));
         });
       });
-    })();
-
-    (function () {
-      // Mark the page when it's being rendered as an embed (so we can hide the preview card inside the iframe)
-      var usp = new URLSearchParams(location.search);
-      if (usp.get('embed') === '1') {
-        document.documentElement.setAttribute('data-embed', '1');
-      }
-
-      var iframe = document.getElementById('personalSiteIframe');
-      var fallback = document.getElementById('personalSiteFallback');
-      var openLink = document.getElementById('personalSiteOpen');
-
-      if (!iframe) return;
-
-      // Build an embed URL of the *current* site, adding ?embed=1 (or &embed=1)
-      try {
-        var current = new URL(window.location.href);
-        // Ensure we add embed=1 without duplicating
-        current.searchParams.set('embed', '1');
-        iframe.src = current.toString();
-        openLink.href = current.toString();
-
-        // If embedding is blocked by headers (X-Frame-Options/CSP), we may never see usable content.
-        // We can't reliably detect all cases, but we can show a fallback after a short grace period.
-        var showedFallback = false;
-        var timer = setTimeout(function () {
-          // If the iframe is still blank or errored, reveal fallback
-          showedFallback = true;
-          fallback.style.display = 'flex';
-        }, 1500);
-
-        iframe.addEventListener('load', function () {
-          // If we got a load event, assume success and cancel fallback (some blocks still fire load with an error page)
-          if (!showedFallback) clearTimeout(timer);
-          // If you *really* want to hide the fallback only when same-origin is confirmed:
-          try {
-            // Accessing contentDocument will throw on cross-origin; here it should be same-origin
-            var doc = iframe.contentDocument;
-            if (doc && doc.body && doc.body.childElementCount === 0) {
-              // Empty doc -> show fallback
-              fallback.style.display = 'flex';
-            }
-          } catch (e) {
-            // Cross-origin (unexpected here) -> show fallback
-            fallback.style.display = 'flex';
-          }
-        });
-      } catch (e) {
-        // If URL building fails for any reason, just show the fallback link to the homepage
-        fallback.style.display = 'flex';
-        openLink.href = '/';
-      }
     })();
   </script>
 </body>
