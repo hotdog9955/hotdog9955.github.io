@@ -370,20 +370,8 @@
         flex-wrap: wrap
       }
     }
-
-    #siteCanvas {
-      width: 100%;
-      height: 170px;
-      /* same as your project image height */
-      display: block;
-      border-radius: 10px;
-      background: #0f1524;
-    }
   </style>
 </head>
-
-<script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-
 
 <body>
   <!-- Header / Nav -->
@@ -555,15 +543,8 @@
         </article>
 
         <!-- Tools -->
-        <article class="project" data-category="tools" id="personalSiteCard">
-          <div class="previewWrap" style="position:relative">
-            <canvas id="siteCanvas" width="600" height="170" aria-label="Rendered website to canvas"></canvas>
-            <div class="controls" style="position:absolute;bottom:10px;left:10px;display:flex;gap:8px">
-              <button id="startSiteRender" class="btn btn--ghost">⚡ Shock Mode</button>
-              <button id="stopSiteRender" class="btn btn--ghost" style="display:none">■ Stop</button>
-              <button id="snapOnce" class="btn btn--ghost">📸 Snapshot</button>
-            </div>
-          </div>
+        <article class="project" data-category="tools">
+          <img src="https://picsum.photos/seed/site/600/400" alt="Placeholder image for personal website" />
           <h3>Personal Website</h3>
           <p>Static site hosted on GitHub Pages.</p>
           <div class="meta">
@@ -615,121 +596,6 @@
         });
       });
     })();
-    <script>
-      (function () {
-  var startBtn = document.getElementById('startSiteRender');
-      var stopBtn  = document.getElementById('stopSiteRender');
-      var snapBtn  = document.getElementById('snapOnce');
-      var canvas   = document.getElementById('siteCanvas');
-      if (!canvas || !window.html2canvas) return;
-
-      var ctx = canvas.getContext('2d');
-      var rafId = null;
-      var running = false;
-      var lastT = 0;
-      var targetFPS = 10;                 // tune: 6–15 is a good “alive” feel without melting CPUs
-      var interval = 1000 / targetFPS;
-
-      function syncCanvasBackingStore() {
-    var w = Math.max(320, Math.floor(canvas.clientWidth));
-      var h = Math.max(120, Math.floor(canvas.clientHeight));
-      if (canvas.width !== w || canvas.height !== h) {
-        canvas.width = w;
-      canvas.height = h;
-    }
-  }
-
-      // Capture the page (DOM -> temporary canvas) and paint into our card canvas with a "cover" crop
-      async function captureOnce(includeSelf) {
-    // Optionally hide our preview while capturing to avoid explosive recursion
-    var card = document.getElementById('personalSiteCard');
-      var prevStyle = '';
-      if (!includeSelf && card) {
-        prevStyle = card.style.visibility;
-      card.style.visibility = 'hidden';
-    }
-
-      // Render the visible page
-      var tempCanvas;
-      try {
-        tempCanvas = await html2canvas(document.documentElement, {
-          backgroundColor: null,      // preserve transparent/gradient bg
-          useCORS: true,              // allow same-origin images/fonts
-          scale: window.devicePixelRatio || 1,
-          windowWidth: document.documentElement.scrollWidth,
-          windowHeight: document.documentElement.scrollHeight,
-          // You can tweak what gets ignored if needed:
-          // ignoreElements: el => el.id === 'someHeavyWidget'
-        });
-    } finally {
-      if (!includeSelf && card) card.style.visibility = prevStyle;
-    }
-
-      // Fit like CSS object-fit: cover
-      syncCanvasBackingStore();
-      var cw = canvas.width, ch = canvas.height;
-      var vw = tempCanvas.width, vh = tempCanvas.height;
-      ctx.clearRect(0, 0, cw, ch);
-
-      var vRatio = vw / vh, cRatio = cw / ch;
-      var sx, sy, sw, sh;
-    if (vRatio > cRatio) {
-        // wider -> crop sides
-        sh = vh;
-      sw = sh * cRatio;
-      sx = (vw - sw) / 2;
-      sy = 0;
-    } else {
-        // taller -> crop top/bottom
-        sw = vw;
-      sh = sw / cRatio;
-      sx = 0;
-      sy = (vh - sh) / 2;
-    }
-      ctx.drawImage(tempCanvas, sx, sy, sw, sh, 0, 0, cw, ch);
-  }
-
-      // Continuous loop, throttled by targetFPS
-      async function loop(t) {
-    if (!running) return;
-    if (t - lastT >= interval) {
-        lastT = t;
-      // Set includeSelf=true if you want full hall-of-mirrors captured into canvas too:
-      await captureOnce(/* includeSelf = */ false);
-    }
-      rafId = requestAnimationFrame(loop);
-  }
-
-      function start() {
-    if (running) return;
-      running = true;
-      startBtn.style.display = 'none';
-      stopBtn.style.display  = 'inline-block';
-      lastT = 0;
-      rafId = requestAnimationFrame(loop);
-  }
-
-      function stop() {
-        running = false;
-      if (rafId) cancelAnimationFrame(rafId), rafId = null;
-      startBtn.style.display = 'inline-block';
-      stopBtn.style.display  = 'none';
-  }
-
-      async function snap() {
-        await captureOnce(false); // change to true for immediate recursive shock
-  }
-
-      startBtn.addEventListener('click', start);
-      stopBtn .addEventListener('click', stop);
-      snapBtn .addEventListener('click', snap);
-      window.addEventListener('resize', function(){ if (!running) syncCanvasBackingStore(); });
-
-      // initialize backing store once
-      syncCanvasBackingStore();
-})();
-  </script>
-
   </script>
 </body>
 
