@@ -1,150 +1,357 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Welcome to Jordan's Awesome Webpage!!!1!</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jordan Cisneros — Embedded & Systems Engineer</title>
+  <meta name="description" content="Portfolio website for Jordan Cisneros — Embedded systems, Rust/C++ backend, data pipelines." />
   <style>
-    body {
-      background: url('images/sibuxiang.gif') repeat;
-      background-position: 0 90px;
-      font-family: Comic Sans MS, sans-serif;
-      text-align: center;
+    :root{
+      --bg: #0b0e14;
+      --card: #121826;
+      --muted: #94a3b8;
+      --text: #e5e7eb;
+      --accent: #60a5fa;
+      --accent-2: #34d399;
+      --ring: rgba(96,165,250,.35);
+      --shadow: rgba(0,0,0,.35);
     }
-    .content-wrapper {
-      background-color: rgba(255, 255, 255, 0.8);
-      padding: 20px;
-      margin: 20px;
-      border-radius: 15px;
-      display: inline-block;
-      max-width: 750px;
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 80% -10%, #0e1322 0%, var(--bg) 50%),
+                  radial-gradient(900px 700px at -10% 0%, #0d1726 0%, var(--bg) 40%);
+      color: var(--text);
+      line-height:1.6;
     }
-    .marquee {
-      font-size: 24px;
-      margin: 20px 0;
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    /* Layout */
+    .container{max-width:1100px;margin:0 auto;padding:24px}
+    header{
+      position:sticky;top:0;z-index:50;background:rgba(11,14,20,.7);backdrop-filter: blur(8px);
+      border-bottom:1px solid rgba(148,163,184,.15)
     }
-    .cover {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('images/glaggle.jpg') repeat;
-      background-color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 9999;
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .nav a{padding:12px 10px;border-radius:10px}
+    .nav a:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .avatar{width:40px;height:40px;border-radius:12px;box-shadow:0 6px 20px var(--shadow);object-fit:cover}
+    .name{font-weight:700;font-size:1.05rem}
+    .links{display:flex;gap:6px;flex-wrap:wrap}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center;padding:48px 0}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border:1px solid rgba(148,163,184,.15);border-radius:16px;padding:24px;box-shadow:0 12px 30px -12px var(--shadow)}
+    .headline{font-size:clamp(1.6rem, 2vw + 1rem, 2.4rem);line-height:1.2;margin:0 0 12px}
+    .sub{color:var(--muted);margin:0 0 18px}
+    .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+    .btn{appearance:none;border:0;border-radius:12px;padding:12px 16px;font-weight:600;cursor:pointer}
+    .btn--primary{background:var(--accent);color:#0b1220;box-shadow:0 12px 24px -12px var(--ring)}
+    .btn--ghost{background:transparent;color:var(--text);border:1px solid rgba(148,163,184,.25)}
+    .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+    .kpi{background:rgba(148,163,184,.06);border:1px solid rgba(148,163,184,.14);padding:16px;border-radius:12px;text-align:center}
+    .kpi h4{margin:0;font-size:1.2rem}
+    .kpi p{margin:4px 0 0;color:var(--muted);font-size:.9rem}
+
+    /* Sections */
+    section{padding:26px 0}
+    section h2{font-size:1.35rem;margin:0 0 12px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+
+    /* Skills */
+    .chips{display:flex;flex-wrap:wrap;gap:10px}
+    .chip{padding:8px 11px;border-radius:999px;background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.25)}
+
+    /* Experience */
+    .timeline{display:grid;gap:12px}
+    .item{display:grid;grid-template-columns:auto 1fr;gap:12px;background:rgba(148,163,184,.06);border:1px solid rgba(148,163,184,.14);padding:16px;border-radius:12px}
+    .item time{color:var(--muted);font-size:.9rem}
+
+    /* Projects */
+    .toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+    .tag{padding:8px 12px;border:1px solid rgba(148,163,184,.25);background:#0f1524;color:var(--text);border-radius:999px;cursor:pointer}
+    .tag[aria-pressed="true"]{background:var(--accent);color:#0b1220;border-color:transparent}
+
+    .project{display:flex;flex-direction:column;gap:10px;background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border:1px solid rgba(148,163,184,.15);border-radius:16px;padding:12px;transition:transform .2s ease}
+    .project:hover{transform:translateY(-3px)}
+    .project img{width:100%;height:170px;object-fit:cover;border-radius:10px}
+    .project h3{margin:4px 0; font-size:1.05rem}
+    .project p{margin:0;color:var(--muted);font-size:.95rem}
+    .meta{display:flex;gap:10px;flex-wrap:wrap}
+    .badge{padding:6px 10px;border-radius:999px;background:rgba(52,211,153,.14);border:1px solid rgba(52,211,153,.35);font-size:.85rem}
+
+    /* Contact */
+    form{display:grid;gap:10px}
+    input,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(148,163,184,.25);background:#0f1524;color:var(--text)}
+    input:focus,textarea:focus{outline:3px solid var(--ring);border-color:transparent}
+
+    footer{border-top:1px solid rgba(148,163,184,.15);margin-top:32px}
+    .foot{display:flex;gap:12px;justify-content:space-between;align-items:center;padding:20px 0;color:var(--muted)}
+
+    /* Responsive */
+    @media (max-width: 900px){
+      .hero{grid-template-columns:1fr}
+      .grid{grid-template-columns:1fr 1fr}
+      .kpis{grid-template-columns:repeat(3,1fr)}
     }
-    .cover-text {
-      font-size: 72px;
-      font-family: Comic Sans MS, sans-serif;
-      color: #000;
+    @media (max-width: 640px){
+      .grid{grid-template-columns:1fr}
+      .kpis{grid-template-columns:1fr 1fr}
+      .nav{flex-wrap:wrap}
     }
   </style>
 </head>
 <body>
-  <div class="cover" id="cover">
-    <div class="cover-text">Click me!</div>
-  </div>
-
-  <div class="content-wrapper">
-    <h1>Welcome to Jordan's Totally Rad Website!!1!!!</h1>
-    <div class="marquee">
-      <marquee>Best website EVER!!</marquee>
+  <!-- Header / Nav -->
+  <header>
+    <div class="container nav" role="navigation" aria-label="Primary">
+      <div class="brand">
+        <img class="avatar" src="https://picsum.photos/seed/jc/200/200" alt="Portrait placeholder" />
+        <div>
+          <div class="name">Jordan Cisneros</div>
+          <div style="color:var(--muted);font-size:.95rem">Embedded & Systems Programmer — Rust • C++ • Python</div>
+        </div>
+      </div>
+      <div class="links">
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </div>
     </div>
+  </header>
 
-    <br>
-    <p><strong>Hi! I'm Jordan. I'm a crackhead software engineer!</strong></p>
-    <p> I misuse everything from embedded systems, webdev, ml, and gamedev! </p>
-    <br>
-    <img src="images/LICK.gif" width="350" />
-    <img src="images/house.gif" alt="Dr house my beloved" width="350" />
-    <br>
-    <img src="images/castle-crashers-dance.gif" alt="Castle crashers dance" width="350">
+  <main class="container">
+    <!-- Hero -->
+    <section class="hero" id="home">
+      <div class="card">
+        <h1 class="headline">Building resilient embedded systems & backend services.</h1>
+        <p class="sub">I design and ship asynchronous firmware, data pipelines, and systems software in Rust, C/C++, and Python. Passionate about solving real‑world problems with reliable engineering.</p>
+        <div class="cta">
+          <a class="btn btn--primary" href="#projects">View Projects</a>
+          <a class="btn btn--ghost" href="mailto:jordancisneroscl@gmail.com">Email Me</a>
+        </div>
+        <div class="kpis" aria-label="Highlights">
+          <div class="kpi"><h4>Rust • C++ • Python</h4><p>Systems-first toolkit</p></div>
+          <div class="kpi"><h4>Async Firmware</h4><p>MicroPython → Embassy</p></div>
+          <div class="kpi"><h4>Data Pipelines</h4><p>SQL • ETL • Edge</p></div>
+        </div>
+      </div>
+      <div class="card" aria-label="Contact details">
+        <h2 style="margin-top:0">Contact</h2>
+        <p>Miami, FL • <a href="tel:+13055100502">(305) 510‑0502</a></p>
+        <p><a href="mailto:jordancisneroscl@gmail.com">jordancisneroscl@gmail.com</a></p>
+        <p><a href="https://github.com/hotdog9955" target="_blank" rel="noopener">GitHub</a></p>
+        <p><a href="#" title="Download resume">Resume (PDF)</a></p>
+      </div>
+    </section>
 
-    <br>
-    <p>This site is still <em>under construction</em>... I change it often so check back later!.</p>
+    <!-- About -->
+    <section id="about">
+      <h2>About</h2>
+      <div class="card">
+        <p>I'm a motivated embedded systems programmer with hands‑on experience in Rust, Python, C++, and backend development. I've rewritten MicroPython firmware to be asynchronous for resilience, built SQL backends and data protocols for edge devices, and contributed to open‑source projects.</p>
+      </div>
+    </section>
 
-    <hr>
-    <h2>Socials!</h2>
-    <ul>
-      <li><a href="https://discord.com/users/734551570296864922">DISCORD: hotdog9955</a></li>
-      <li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">MYSPACE!</a></li>
-      <li><a href="https://steamcommunity.com/profiles/76561198251432254/">STEAM!!</a></li>
-    </ul>
+    <!-- Skills -->
+    <section id="skills">
+      <h2>Skills</h2>
+      <div class="card">
+        <div class="chips" role="list">
+          <span class="chip" role="listitem">Rust</span>
+          <span class="chip" role="listitem">C / C++</span>
+          <span class="chip" role="listitem">Python</span>
+          <span class="chip" role="listitem">Java</span>
+          <span class="chip" role="listitem">Lua</span>
+          <span class="chip" role="listitem">Linux / Unix</span>
+          <span class="chip" role="listitem">Git / GitHub / GitLab</span>
+          <span class="chip" role="listitem">Azure (IaaS / PaaS)</span>
+          <span class="chip" role="listitem">SQL / Pandas</span>
+          <span class="chip" role="listitem">TensorFlow / PyTorch</span>
+          <span class="chip" role="listitem">Embedded Systems</span>
+          <span class="chip" role="listitem">Data Pipelines</span>
+        </div>
+      </div>
+    </section>
 
-    <p>Feel free to talk to me, even if you don't know me!</p>
+    <!-- Experience -->
+    <section id="experience">
+      <h2>Experience</h2>
+      <div class="timeline">
+        <article class="item">
+          <div>
+            <h3 style="margin:0">Intern, Fairchild Tropical Botanic Garden (NASA Partnership)</h3>
+            <time>Miami, FL — 2023</time>
+            <p style="margin:.4rem 0 0;color:var(--muted)">Rewrote core firmware to be asynchronous (MicroPython → resilient hardware); managed SQL backend for planter data; implemented edge data protocols; contributed to open‑source.</p>
+            <p class="meta">
+              <a class="badge" href="https://github.com/Growing-Beyond-Earth/GBE-Box-Python-Experimental" target="_blank" rel="noopener">GBE‑Box Repo</a>
+            </p>
+          </div>
+        </article>
+        <article class="item">
+          <div>
+            <h3 style="margin:0">Contract CS Tutor — Florida International University</h3>
+            <time>Spring 2025</time>
+            <p style="margin:.4rem 0 0;color:var(--muted)">Tutored Data Structures, Algorithms, Java, and Python; led exam prep reviews for undergraduate CS students.</p>
+          </div>
+        </article>
+      </div>
+    </section>
 
-    <hr>
+    <!-- Projects with Reactive Category Buttons -->
+    <section id="projects">
+      <h2>Projects</h2>
+      <div class="toolbar" role="toolbar" aria-label="Project categories">
+        <button class="tag" data-filter="all" aria-pressed="true">All</button>
+        <button class="tag" data-filter="embedded">Embedded</button>
+        <button class="tag" data-filter="backend">Backend</button>
+        <button class="tag" data-filter="data-ml">Data / ML</button>
+        <button class="tag" data-filter="tools">Tools</button>
+      </div>
+      <div class="grid" id="projectGrid">
+        <!-- Embedded -->
+        <article class="project" data-category="embedded">
+          <img src="https://picsum.photos/seed/rtc/600/400" alt="Placeholder image for Rust Async I2C Driver" />
+          <h3>Rust Async I2C Driver</h3>
+          <p>Async driver for DS3231 RTC built with Embassy. Focus on resilience and low‑power scheduling.</p>
+          <div class="meta">
+            <span class="badge">Rust</span>
+            <span class="badge">Embassy</span>
+            <span class="badge">I2C</span>
+          </div>
+        </article>
 
-    <h2>MY INTERESTS!!</h2>
-    <ul>
-      <li><a href="https://www.youtube.com/watch?v=nAgi7HS8yJU&list=PLBakWosU0sfj_-XZSlGy-IOnDNplD3Ttj">FABULOUS BEASTS!</a></li>
-      <li>cars (the vehicle, not movies)</li>
-      <li>Infinity Train</li>
-      <li>Rogue Lineage and Deepwoken</li>
-      <li><a href="https://github.com/hotdog9955">PROGRAMMING</a></li>
-      <li>DND</li>
-      <li>House M.D</li>
-      <li>Rainworld</li>
-      <li>Castle Crashers</li>
-      <li>Oxygen Not Included</li>
-      <li>JoJo's Bizarre Adventure</li>
-      <li>Team Fortress 2</li>
-      <li><a href="https://www.chess.com/member/hotdog9955">Chess</a></li>
-    </ul>
+        <article class="project" data-category="embedded">
+          <img src="https://picsum.photos/seed/obd/600/400" alt="Placeholder image for Nintendo DS OBD" />
+          <h3>Nintendo DS Car App</h3>
+          <p>OBD reader showing real‑time vehicle telemetry on the DS. Fun blend of embedded and UX constraints.</p>
+          <div class="meta">
+            <span class="badge">C/C++</span>
+            <span class="badge">OBD</span>
+          </div>
+        </article>
 
-    <hr>
-    <h2>MEEEE!</h2>
-    <img src="images/suit-me.jpg" alt="me in a suit" width="350" />
-    <img src="images/soner.jpg" alt="furry me" width="350" />
-    <br>
-    <img src="images/MEE.png" alt="Me casual" width="350"/>
-    <img src="images/meOutfit.png" alt="Me outfit" width="350"/>
-    <br>
-    <img src="images/hat_me.jpg" alt="hat me outfit" width="350"/>
+        <!-- Backend / Systems -->
+        <article class="project" data-category="backend">
+          <img src="https://picsum.photos/seed/chat/600/400" alt="Placeholder image for CLI Chatroom" />
+          <h3>CLI Chatroom (Java)</h3>
+          <p>Networked messaging with basic auth and channels. Emphasis on concurrency and reliability.</p>
+          <div class="meta">
+            <span class="badge">Java</span>
+            <span class="badge">Sockets</span>
+          </div>
+        </article>
 
-    <hr>
+        <!-- Data / ML -->
+        <article class="project" data-category="data-ml">
+          <img src="https://picsum.photos/seed/roblox/600/400" alt="Placeholder image for ML Library in Roblox" />
+          <h3>ML Library in Roblox</h3>
+          <p>Lightweight ML helpers for Roblox developers, exposing practical APIs for inference flows.</p>
+          <div class="meta">
+            <span class="badge">Lua</span>
+            <span class="badge">ML</span>
+          </div>
+        </article>
 
-    <h2>WIFE</h2>
-    <p>LOOK AT MY BEAUTIFUL WIFE</p>
+        <!-- Tools -->
+        <article class="project" data-category="tools">
+          <img src="https://picsum.photos/seed/site/600/400" alt="Placeholder image for personal website" />
+          <h3>Personal Website</h3>
+          <p>Retro‑themed static site hosted on GitHub Pages. Simple, fast, and fully accessible.</p>
+          <div class="meta">
+            <span class="badge">HTML/CSS</span>
+            <span class="badge">Accessibility</span>
+          </div>
+        </article>
+      </div>
+    </section>
 
-    <img src="images/burger.jpg" alt="bungus" width="350" />
-    <img src="images/gfur.jpg" alt="kmiss" width="350" />
-    <br>
-    <img src="images/WIFE2.jpg" alt="WIVE" width="350" />
+    <!-- Contact -->
+    <section id="contact">
+      <h2>Get in touch</h2>
+      <div class="card">
+        <form action="mailto:jordancisneroscl@gmail.com" method="post" enctype="text/plain" onsubmit="return validateForm(event)">
+          <label>
+            <span>Name</span>
+            <input type="text" name="name" placeholder="Your name" required />
+          </label>
+          <label>
+            <span>Email</span>
+            <input type="email" name="email" placeholder="you@example.com" required />
+          </label>
+          <label>
+            <span>Message</span>
+            <textarea name="message" rows="5" placeholder="Hello Jordan..." required></textarea>
+          </label>
+          <button class="btn btn--primary" type="submit">Send</button>
+        </form>
+      </div>
+    </section>
 
-    <hr>
-
-    <h2>FAVORITE QUOTES</h2>
-    <ul>
-      <li>“An idiot admires complexity, a genius admires simplicity" - Terry A. Davis</li>
-      <li>“Intelligence is the ability to avoid doing work, yet getting the work done.” - Linus Torvalds</li>
-      <li>"Free software is a matter of liberty, not price. To understand the concept, you should think of ‘free’ as in ‘free speech,’ not as in ‘free beer.’" - Richard Stallman</li>
-    </ul>
-    <hr>
-    <h2>Website reviews!</h2>
-    <p>⭐⭐⭐⭐⭐</p><br>
-    <p>"I hated it. Why is the music still playing when I closed the tab!?"</p><br>
-    <p>-Azull</p><br>
-    <br>
-    <p>send me reviews and ill include it here!</p>
-    <hr>
-    <p>Come back soon!</p>
-
-    <img src="images/burning-fire.gif" alt="fiire ahh" />
-  </div>
+    <footer>
+      <div class="container foot">
+        <span>© <span id="year"></span> Jordan Cisneros</span>
+        <div class="links">
+          <a href="#home">Back to top ↑</a>
+        </div>
+      </div>
+    </footer>
+  </main>
 
   <script>
-    document.getElementById('cover').addEventListener('click', function() {
-      var audio = document.createElement('audio');
-      audio.setAttribute('src', 'audio/Spazzmatica_Polka.mp3');
-      audio.setAttribute('autoplay', 'autoplay');
-      audio.setAttribute('loop', 'loop');
-      audio.volume = 0.25;
-      document.body.appendChild(audio);
-      document.getElementById('cover').style.display = 'none';
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Smooth scroll for in-page links (progressively enhanced)
+    document.querySelectorAll('a[href^="#"]').forEach(function(a){
+      a.addEventListener('click', function(e){
+        var target = document.querySelector(this.getAttribute('href'));
+        if(target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth'}); }
+      });
     });
+
+    // Reactive category filter for projects
+    (function(){
+      var buttons = document.querySelectorAll('.toolbar .tag');
+      var cards = document.querySelectorAll('#projectGrid .project');
+      function setActive(btn){
+        buttons.forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+        btn.setAttribute('aria-pressed','true');
+      }
+      function apply(filter){
+        cards.forEach(function(card){
+          var show = (filter === 'all') || (card.getAttribute('data-category') === filter);
+          card.style.display = show ? 'flex' : 'none';
+        });
+      }
+      buttons.forEach(function(btn){
+        btn.addEventListener('click', function(){
+          setActive(this);
+          apply(this.getAttribute('data-filter'));
+        });
+      });
+    })();
+
+    // Basic form validation (client-side)
+    function validateForm(e){
+      var form = e.target;
+      var email = form.email.value || '';
+      var ok = /.+@.+\..+/.test(email);
+      if(!ok){
+        alert('Please enter a valid email address.');
+        e.preventDefault();
+        return false;
+      }
+      return true;
+    }
   </script>
 </body>
 </html>
