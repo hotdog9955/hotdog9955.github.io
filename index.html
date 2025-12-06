@@ -134,17 +134,23 @@
     <img src="images/burning-fire.gif" alt="fiire ahh" />
   </div>
 
-  <script>
-    document.getElementById('cover').addEventListener('click', function () {
-      var audio = document.createElement('audio');
-      audio.setAttribute('src', 'audio/Spazzmatica_Polka.mp3');
-      audio.setAttribute('autoplay', 'autoplay');
-      audio.setAttribute('loop', 'loop');
-      audio.volume = 0.25;
-      document.body.appendChild(audio);
-      document.getElementById('cover').style.display = 'none';
-    });
-  </script>
+<script>
+  document.getElementById('cover').addEventListener('click', function () {
+    var audio = document.createElement('audio');
+    audio.src = 'audio/Spazzmatica_Polka.mp3';
+    audio.loop = true;
+    
+
+    audio.volume = 0.1; 
+    
+    document.body.appendChild(audio);
+    
+
+    audio.play();
+    
+    document.getElementById('cover').style.display = 'none';
+  });
+</script>
 </body>
 
 </html>
